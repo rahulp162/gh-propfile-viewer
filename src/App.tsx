@@ -3,10 +3,10 @@ import './App.css';
 import { getRepos, getUserData, getUserName } from './features/slice';
 import { AppDispatch } from './store';
 import Button from "@mui/material/Button"
-import Repos from './components/Repos';
+// import Repos from './components/Repos';
 
 import Overview from './components/Overview';
-import { FormGroup, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();

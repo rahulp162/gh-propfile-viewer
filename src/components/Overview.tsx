@@ -1,10 +1,10 @@
-import { Icon, Tooltip } from "@mui/material"
+import { Tooltip } from "@mui/material"
 import { useSelector } from "react-redux"
 import BusinessIcon from '@mui/icons-material/Business';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import Repos from "./Repos";
 const Overview = ()=>{
-    const {userData,loading} = useSelector((state:any)=>state.slice)
+    const {userData} = useSelector((state:any)=>state.slice)
 
     return( 
         <div className="px-4 flex flex-row justify-center items-start">
