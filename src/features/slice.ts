@@ -3,17 +3,27 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const getUserData = createAsyncThunk(
   'slice/getUserData',
   async (username: string) => {
-    const response = await fetch(`https://api.github.com/users/${username}/repos`);
+    const response = await fetch(`https://api.github.com/users/${username}`);
     const data = await response.json();
     return data;
   }
 );
+
+export const getRepos = createAsyncThunk(
+  'slice/getRepos',
+  async(username:string)=>{
+    const response = await fetch(`https://api.github.com/users/${username}/repos`);
+    const data = await response.json();
+    return data;
+  }
+)
 
 const slice = createSlice({
   name: "slice",
   initialState: {
     userName: '',
     userData: [],
+    repos:[],
     loading: false,
     error: "",
   },
@@ -35,7 +45,20 @@ const slice = createSlice({
       .addCase(getUserData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "";
-      });
+      })
+      .addCase(getRepos.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(getRepos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.repos = action.payload;
+      })
+      .addCase(getRepos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "";
+      })
+      
   },
 });
 

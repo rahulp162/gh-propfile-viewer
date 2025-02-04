@@ -1,18 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import React, { useEffect } from 'react';
-import { getUserData, getUserName } from './features/slice';
+import { getRepos, getUserData, getUserName } from './features/slice';
 import { AppDispatch } from './store';
+import Button from "@mui/material/Button"
+import Repos from './components/Repos';
+
+import Overview from './components/Overview';
+import { FormGroup, TextField } from '@mui/material';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const { userName, userData, loading, error } = useSelector((state: any) => state.slice);
-
-  useEffect(() => {
-    if (userName) {
-      dispatch(getUserData(userName));
-    }
-  }, [userName, dispatch]);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(getUserName(e.target.value));
@@ -22,43 +20,40 @@ function App() {
     e.preventDefault();
     if (userName) {
       dispatch(getUserData(userName));
+      dispatch(getRepos(userName));
     }
   };
 
   return (
-    <>
-      <h1>GitHub Profile Viewer</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter GitHub Username"
-          value={userName}
-          onChange={handleInput}
-        />
-        <button type="submit">Get Insights</button>
-      </form>
+    <div>
+      <div style={{
+        height:userData.id?"35vh":"100vh",
+        transition:"all 0.5s ease"
+      }} className='px-2 py-2 flex flex-col items-center justify-center'>
+        
+        <div className='text-2xl py-6 '>GitHub Profile Viewer</div>
 
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error}</div>}
+        
+        <form onSubmit={handleSubmit} className='flex flex-row w-80 justify-evenly items-center mb-4'>
+          <TextField
+            variant='filled'
+            label='Username'
+            className='w-48'
+            type="text"
+            placeholder="Enter GitHub Username"
+            value={userName}
+            onChange={handleInput}
+          />
+          <Button loading={loading} type="submit">Get Insights</Button>
+        </form>
 
-      <div>
-        {userData.length > 0 ? (
-          <ul>
-            {userData.map((repo: any) => (
-              <li key={repo.id}>
-                <h3>{repo.name}</h3>
-                <p>{repo.description}</p>
-                <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-                  View Repo
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          !loading && <div>No Data Available</div>
-        )}
       </div>
-    </>
+      
+      {(userData.id || userData.message) && <Overview/>}
+  
+      {error && <div className='absolute'>Error: {error}</div>}
+
+    </div>
   );
 }
 
