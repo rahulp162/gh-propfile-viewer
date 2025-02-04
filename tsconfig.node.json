@@ -24,5 +24,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "vite.config.ts"],
-  "types": ["react", "react-dom", "react-redux"]
+  "types": ["vite/client", "react", "react-dom", "@tailwindcss/vite"]
 }
