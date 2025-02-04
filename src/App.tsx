@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { getRepos, getUserData, getUserName } from './features/slice';
-import { AppDispatch } from './store';
+import { AppDispatch } from './store.ts';
 import Button from "@mui/material/Button"
 // import Repos from './components/Repos';
 
-import Overview from './components/Overview';
+import Overview from './components/Overview.tsx';
 import { TextField } from '@mui/material';
 
 function App() {
