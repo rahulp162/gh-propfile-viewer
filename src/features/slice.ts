@@ -74,13 +74,17 @@ export interface RootState {
       id?: number;
       login?: string;
       avatar_url?: string;
+      location?: string;
       name?: string;
       company?: string;
       blog?: string;
       message?: string;
+      followers?: number;
+      following?: number;
     };
     repos: Array<{
       id: number;
+
       name: string;
       description: string;
       html_url: string;
