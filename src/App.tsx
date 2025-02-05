@@ -9,8 +9,6 @@ import { RootState } from './features/slice.ts';
 import Overview from './components/Overview.tsx';
 import { TextField } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
-import { useEffect } from 'react';
-import { toast } from 'react-hot-toast';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
