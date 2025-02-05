@@ -1,9 +1,8 @@
 import { Tooltip } from "@mui/material"
 import { useSelector } from "react-redux"
-import BusinessIcon from '@mui/icons-material/Business';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import { Business as BusinessIcon, RocketLaunch as RocketLaunchIcon } from '@mui/icons-material';
 import Repos from "./Repos.tsx";
-import { RootState } from "../features/slice";
+import { RootState } from "../features/slice.ts";
 
 const Overview = ()=>{
     const { userData } = useSelector((state: RootState) => state.slice)

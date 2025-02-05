@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../store.ts";
 
 const Repos = () => {
     const { repos, loading } = useSelector((state: RootState) => state.slice);

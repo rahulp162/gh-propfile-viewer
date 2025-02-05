@@ -11,7 +11,7 @@
     "jsx": "react-jsx",  // ✅ Required for JSX
 
     /* Module Resolution */
-    "moduleResolution": "node16",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",

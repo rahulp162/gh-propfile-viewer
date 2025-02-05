@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import { getRepos, getUserData, getUserName } from './features/slice';
+import { getRepos, getUserData, getUserName } from './features/slice.ts';
 import { AppDispatch } from './store.ts';
 import {Button} from "@mui/material"
-import { RootState } from './features/slice';
+import { RootState } from './features/slice.ts';
 // import Repos from './components/Repos';
 
 import Overview from './components/Overview.tsx';
