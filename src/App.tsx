@@ -12,7 +12,7 @@ import { Toaster } from 'react-hot-toast';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const { userName, userData, loading, error } = useSelector((state: RootState) => state.slice);
+  const { userName, userData, loading } = useSelector((state: RootState) => state.slice);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(getUserName(e.target.value));
@@ -28,7 +28,7 @@ function App() {
 
   // useEffect(() => {
   //   if (error) {
-  //     toast.error(error);
+  //     console.log("Errors: ",userData)
   //   }
   // }, [error]);
 

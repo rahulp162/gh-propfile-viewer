@@ -18,10 +18,17 @@ export const getUserData = createAsyncThunk(
 
 export const getRepos = createAsyncThunk(
   'slice/getRepos',
-  async(username:string)=>{
-    const response = await fetch(`https://api.github.com/users/${username}/repos`);
-    const data = await response.json();
-    return data;
+  async(username:string,{rejectWithValue})=>{
+    try{
+      const response = await fetch(`https://api.github.com/users/${username}/repos`);
+      const data = await response.json();
+      if (response.status !== 200) {
+        return rejectWithValue(data.message);
+      }
+      return data;
+    }catch(err){
+      return rejectWithValue('Failed to fetch repos')
+    }
   }
 )
 

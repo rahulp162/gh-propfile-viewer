@@ -3,6 +3,7 @@ import sliceReducer from './features/slice.ts';
 import { logger } from 'redux-logger';
 import rateLimit from './features/rateLimit.middleware.ts';
 import errorHandler from './features/errorHandler.middleware.ts';
+import cacheMiddleware from './features/cache.middleware.ts';
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     .concat(logger)
     .concat(rateLimit)
     .concat(errorHandler)
+    .concat(cacheMiddleware)
   },
 });
 
