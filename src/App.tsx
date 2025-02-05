@@ -8,6 +8,7 @@ import { RootState } from './features/slice.ts';
 
 import Overview from './components/Overview.tsx';
 import { TextField } from '@mui/material';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,6 +28,10 @@ function App() {
 
   return (
     <div>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       <div style={{
         height:userData.id?"35vh":"100vh",
         transition:"all 0.5s ease"
