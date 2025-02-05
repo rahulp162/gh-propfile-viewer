@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { getRepos, getUserData, getUserName } from './features/slice';
 import { AppDispatch } from './store.ts';
-import Button from "@mui/material/Button"
+import {Button} from "@mui/material"
 // import Repos from './components/Repos';
 
 import Overview from './components/Overview.tsx';
@@ -10,7 +10,7 @@ import { TextField } from '@mui/material';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const { userName, userData, loading, error } = useSelector((state: any) => state.slice);
+  const { userName, userData, loading, error } = useSelector((state: RootState) => state.slice);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(getUserName(e.target.value));

@@ -22,8 +22,8 @@ const slice = createSlice({
   name: "slice",
   initialState: {
     userName: '',
-    userData: [],
-    repos:[],
+    userData: {} as any,
+    repos: [] as any[],
     loading: false,
     error: "",
   },
@@ -64,3 +64,27 @@ const slice = createSlice({
 
 export const { getUserName } = slice.actions;
 export default slice.reducer;
+
+// Add proper type for the state
+interface RootState {
+  slice: {
+    userName: string;
+    userData: {
+      id?: number;
+      login?: string;
+      avatar_url?: string;
+      name?: string;
+      company?: string;
+      blog?: string;
+      message?: string;
+    };
+    repos: Array<{
+      id: number;
+      name: string;
+      description: string;
+      html_url: string;
+    }>;
+    loading: boolean;
+    error: string;
+  }
+}

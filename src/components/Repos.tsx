@@ -1,13 +1,19 @@
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const Repos = () => {
-    const { repos, loading } = useSelector((state: any) => state.slice);
+    const { repos, loading } = useSelector((state: RootState) => state.slice);
     return (
         <div>
             {repos.length > 0 ? (
             <ul>
-                {repos.map((repo: any) => (
+                {repos.map((repo: {
+                    id: number;
+                    name: string;
+                    description: string;
+                    html_url: string;
+                }) => (
                 <li key={repo.id}>
                     <h3>{repo.name}</h3>
                     <p>{repo.description}</p>
