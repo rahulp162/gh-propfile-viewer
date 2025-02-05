@@ -2,10 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getUserData = createAsyncThunk(
   'slice/getUserData',
-  async (username: string) => {
-    const response = await fetch(`https://api.github.com/users/${username}`);
-    const data = await response.json();
-    return data;
+  async (username: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://api.github.com/users/${username}`);
+      const data = await response.json();
+      if (response.status !== 200) {
+        return rejectWithValue(data.message);
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch user data');
+    }
   }
 );
 

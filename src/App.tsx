@@ -9,6 +9,8 @@ import { RootState } from './features/slice.ts';
 import Overview from './components/Overview.tsx';
 import { TextField } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +27,12 @@ function App() {
       dispatch(getRepos(userName));
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   return (
     <div>
@@ -57,8 +65,6 @@ function App() {
       
       {(userData.id || userData.message) && <Overview/>}
   
-      {error && <div className='absolute'>Error: {error}</div>}
-
     </div>
   );
 }
