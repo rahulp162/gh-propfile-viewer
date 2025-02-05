@@ -3,6 +3,7 @@ import './App.css';
 import { getRepos, getUserData, getUserName } from './features/slice';
 import { AppDispatch } from './store.ts';
 import {Button} from "@mui/material"
+import { RootState } from './features/slice';
 // import Repos from './components/Repos';
 
 import Overview from './components/Overview.tsx';

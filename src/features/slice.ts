@@ -66,10 +66,11 @@ export const { getUserName } = slice.actions;
 export default slice.reducer;
 
 // Add proper type for the state
-interface RootState {
+export interface RootState {
   slice: {
     userName: string;
     userData: {
+
       id?: number;
       login?: string;
       avatar_url?: string;
