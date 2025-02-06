@@ -1,4 +1,4 @@
-import { autoBatchEnhancer, configureStore, createDynamicMiddleware } from '@reduxjs/toolkit';
+import { autoBatchEnhancer, configureStore, createDynamicMiddleware, createImmutableStateInvariantMiddleware } from '@reduxjs/toolkit';
 import sliceReducer from './features/slice.ts';
 import { logger } from 'redux-logger';
 import rateLimit from './features/rateLimit.middleware.ts';
@@ -8,6 +8,10 @@ import listenerMiddleware from './features/listener.middleware.ts';
 // import immutableMiddleware from './features/immutable.middleware.ts';
 
 const dynMiddleware = createDynamicMiddleware()
+const immutableMW = createImmutableStateInvariantMiddleware({
+  ignoredPaths:['immutable']
+});
+
 const store = configureStore({
   reducer: {
     slice: sliceReducer,
@@ -21,6 +25,7 @@ const store = configureStore({
       }
     )
     .concat(listenerMiddleware.middleware)
+    .concat(immutableMW)
     .concat(logger)
     .concat(rateLimit)
     .concat(errorHandler)
