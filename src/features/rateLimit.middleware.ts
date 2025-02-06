@@ -8,7 +8,7 @@ const rateLimit: Middleware = () => (next:any) => (action:any) => {
     const lastRequestTime = timeStamps[action.type] || 0;
     const timeSinceLastRequest = currentTime - lastRequestTime;
     if(timeSinceLastRequest < 50){
-        toast.error("thats 1 letter per 50ms, too fast!");
+        toast.error("thats 1 change per 50ms, too fast!");
         return Promise.resolve(); 
     }
     timeStamps[action.type] = currentTime;

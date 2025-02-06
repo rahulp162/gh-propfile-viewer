@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { getRepos, getUserData, getUserName } from './features/slice.ts';
-import { AppDispatch } from './store.ts';
+import  { AppDispatch } from './store.ts';
 import {Button} from "@mui/material"
 import { RootState } from './features/slice.ts';
 // import Repos from './components/Repos';
@@ -9,6 +9,7 @@ import { RootState } from './features/slice.ts';
 import Overview from './components/Overview.tsx';
 import { TextField } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
+import Mutation from './test/Mutation.tsx';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,7 +26,6 @@ function App() {
       dispatch(getRepos(userName));
     }
   };
-
   // useEffect(() => {
   //   if (error) {
   //     console.log("Errors: ",userData)
@@ -37,7 +37,9 @@ function App() {
       <Toaster
         position="top-center"
         reverseOrder={false}
-      />
+        />
+        <Mutation/>
+
       <div style={{
         height:userData.id?"35vh":"100vh",
         transition:"all 0.5s ease"
@@ -45,7 +47,6 @@ function App() {
         
         <div className='text-2xl py-6 '>GitHub Profile Viewer</div>
 
-        
         <form onSubmit={handleSubmit} className='flex flex-row w-80 justify-evenly items-center mb-4'>
           <TextField
             variant='filled'
@@ -57,6 +58,7 @@ function App() {
             onChange={handleInput}
           />
           <Button loading={loading} type="submit">Get Insights</Button>
+          
         </form>
 
       </div>

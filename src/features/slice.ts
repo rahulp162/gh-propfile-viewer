@@ -40,11 +40,20 @@ const slice = createSlice({
     repos: [] as any[],
     loading: false,
     error: "",
+    date: Date.now(),
+    immutable: 0
   },
   reducers: {
     getUserName: (state, action) => {
       state.userName = action.payload;
     },
+    mutateImmutable: (state)=>{
+      console.log("mutating")
+      state.immutable+=1;
+    },
+    listenThis: (state)=>{
+      state.immutable +=1
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -76,7 +85,7 @@ const slice = createSlice({
   },
 });
 
-export const { getUserName } = slice.actions;
+export const { getUserName, mutateImmutable, listenThis } = slice.actions;
 export default slice.reducer;
 
 // Add proper type for the state
@@ -96,6 +105,8 @@ export interface RootState {
       followers?: number;
       following?: number;
     };
+    date?: number;
+    readonly immutable: number;
     repos: Array<{
       id: number;
 
