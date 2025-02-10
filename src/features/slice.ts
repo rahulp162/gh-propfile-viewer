@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, isAnyOf, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf, isFulfilled, isPending, isRejected, miniSerializeError } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 export const getUserData = createAsyncThunk(
@@ -16,6 +16,20 @@ export const getUserData = createAsyncThunk(
     }
   }
 );
+
+export const intentionalError = createAsyncThunk(
+  'slice/intentionalError',
+  async ()=>{
+    try{
+      throw new Error("This is an intentional Error")
+    }catch(e){
+      console.log("Before MSE: ",e)
+      const mse = miniSerializeError(e)
+      console.log("After MSE: ",mse)
+      return miniSerializeError(e)
+    }
+  }
+)
 
 export const getRepos = createAsyncThunk(
   'slice/getRepos',
@@ -56,74 +70,77 @@ const slice = createSlice({
       state.immutable +=1
     }
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(getUserData.pending, (state) => {
-  //       state.loading = true;
-  //       state.error = "";
-  //     })
-  //     .addCase(getUserData.fulfilled, (state, action) => {
-  //       state.loading = false;
-  //       state.userData = action.payload;
-  //     })
-  //     .addCase(getUserData.rejected, (state, action) => {
-  //       state.loading = false;
-  //       state.error = action.error.message || "";
-  //     })
-  //     .addCase(getRepos.pending, (state) => {
-  //       state.loading = true;
-  //       state.error = "";
-  //     })
-  //     .addCase(getRepos.fulfilled, (state, action) => {
-  //       state.loading = false;
-  //       state.repos = action.payload;
-  //     })
-  //     .addCase(getRepos.rejected, (state, action) => {
-  //       state.loading = false;
-  //       state.error = action.error.message || "";
-  //     })
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUserData.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(getUserData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+      })
+      .addCase(getUserData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "";
+      })
+      .addCase(getRepos.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(getRepos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.repos = action.payload;
+      })
+      .addCase(getRepos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "";
+      })
+      .addCase(intentionalError.rejected, (state, action) => {
+        state.error = String(action.payload);
+      });
+  },
 
   //Combining all the addCases using addMatcher for much cleaner code
 
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(
-        isPending(getUserData, getRepos), 
-        (state) => {
-          state.loading = true;
-          state.error = "";
-        }
-      )
-      .addMatcher(
-        isFulfilled(getUserData, getRepos),
-        (state, action) => {
-          state.loading = false;
-          if(action.type === getUserData.fulfilled.type){
-            state.userData = action.payload
-          }
-          if(action.type === getRepos.fulfilled.type){
-            state.repos = action.payload
-          }
-          toast.success("Data fetched successfully!");
-        }
-      )
-      .addMatcher(
-        isRejected(getUserData, getRepos),
-        (state, action) => {
-          state.loading = false;
-          state.error = String(action.payload) || "Something went wrong!";
-          toast.error(`Error: ${action.payload || "Unknown error"}`);
-        }
-      )
-      .addMatcher(
-        isAnyOf(getUserData.fulfilled, getUserData.rejected), 
-        (state) => {
-          toast.success("The loader is stopped by \"isAnyOf()\" Matcher");
-          state.loading = false;
-        }
-      );
-  }
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addMatcher(
+  //       isPending(getUserData, getRepos), 
+  //       (state) => {
+  //         state.loading = true;
+  //         state.error = "";
+  //       }
+  //     )
+  //     .addMatcher(
+  //       isFulfilled(getUserData, getRepos),
+  //       (state, action) => {
+  //         state.loading = false;
+  //         if(action.type === getUserData.fulfilled.type){
+  //           state.userData = action.payload
+  //         }
+  //         if(action.type === getRepos.fulfilled.type){
+  //           state.repos = action.payload
+  //         }
+  //         toast.success("Data fetched successfully!");
+  //       }
+  //     )
+  //     .addMatcher(
+  //       isRejected(getUserData, getRepos),
+  //       (state, action) => {
+  //         state.loading = false;
+  //         state.error = String(action.payload) || "Something went wrong!";
+  //         toast.error(`Error: ${action.payload || "Unknown error"}`);
+  //       }
+  //     )
+  //     .addMatcher(
+  //       isAnyOf(getUserData.fulfilled, getUserData.rejected), 
+  //       (state) => {
+  //         toast.success("The loader is stopped by \"isAnyOf()\" Matcher");
+  //         state.loading = false;
+  //       }
+  //     );
+  // }
   
 });
 
@@ -151,7 +168,6 @@ export interface RootState {
     readonly immutable: number;
     repos: Array<{
       id: number;
-
       name: string;
       description: string;
       html_url: string;
