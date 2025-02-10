@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 export const getUserData = createAsyncThunk(
   'slice/getUserData',
@@ -55,34 +56,75 @@ const slice = createSlice({
       state.immutable +=1
     }
   },
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addCase(getUserData.pending, (state) => {
+  //       state.loading = true;
+  //       state.error = "";
+  //     })
+  //     .addCase(getUserData.fulfilled, (state, action) => {
+  //       state.loading = false;
+  //       state.userData = action.payload;
+  //     })
+  //     .addCase(getUserData.rejected, (state, action) => {
+  //       state.loading = false;
+  //       state.error = action.error.message || "";
+  //     })
+  //     .addCase(getRepos.pending, (state) => {
+  //       state.loading = true;
+  //       state.error = "";
+  //     })
+  //     .addCase(getRepos.fulfilled, (state, action) => {
+  //       state.loading = false;
+  //       state.repos = action.payload;
+  //     })
+  //     .addCase(getRepos.rejected, (state, action) => {
+  //       state.loading = false;
+  //       state.error = action.error.message || "";
+  //     })
+  // },
+
+  //Combining all the addCases using addMatcher for much cleaner code
+
   extraReducers: (builder) => {
     builder
-      .addCase(getUserData.pending, (state) => {
-        state.loading = true;
-        state.error = "";
-      })
-      .addCase(getUserData.fulfilled, (state, action) => {
-        state.loading = false;
-        state.userData = action.payload;
-      })
-      .addCase(getUserData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "";
-      })
-      .addCase(getRepos.pending, (state) => {
-        state.loading = true;
-        state.error = "";
-      })
-      .addCase(getRepos.fulfilled, (state, action) => {
-        state.loading = false;
-        state.repos = action.payload;
-      })
-      .addCase(getRepos.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "";
-      })
-      
-  },
+      .addMatcher(
+        isPending(getUserData, getRepos), 
+        (state) => {
+          state.loading = true;
+          state.error = "";
+        }
+      )
+      .addMatcher(
+        isFulfilled(getUserData, getRepos),
+        (state, action) => {
+          state.loading = false;
+          if(action.type === getUserData.fulfilled.type){
+            state.userData = action.payload
+          }
+          if(action.type === getRepos.fulfilled.type){
+            state.repos = action.payload
+          }
+          toast.success("Data fetched successfully!");
+        }
+      )
+      .addMatcher(
+        isRejected(getUserData, getRepos),
+        (state, action) => {
+          state.loading = false;
+          state.error = String(action.payload) || "Something went wrong!";
+          toast.error(`Error: ${action.payload || "Unknown error"}`);
+        }
+      )
+      .addMatcher(
+        isAnyOf(getUserData.fulfilled, getUserData.rejected), 
+        (state) => {
+          toast.success("The loader is stopped by \"isAnyOf()\" Matcher");
+          state.loading = false;
+        }
+      );
+  }
+  
 });
 
 export const { getUserName, mutateImmutable, listenThis } = slice.actions;
